@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+    http://dubbo.apache.org/schema/dubbo
+    http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+    <context:annotation-config/>
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="com.fwtai.api.user.consumer"/>
+    <!-- 使用ZK注册中心暴露服务地址 -->
+    <dubbo:registry address="zookeeper://192.168.3.166:2181"/>
+
+    <!--启用注解驱动-->
+    <mvc:annotation-driven/>
+    <context:component-scan base-package="com.fwtai.controller"/>
+    <!-- dubbo扫描注解包路径，多个包用逗号分隔 -->
+    <dubbo:annotation package="com.fwtai.controller"/>
+
+    <!-- jsp视图解析器 -->
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/view/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"></property>
+        <property name="maxUploadSize" value="10485760000"></property>
+        <property name="maxInMemorySize" value="40960"></property>
+        <property name="resolveLazily" value="true"/>
+    </bean>
+    <mvc:default-servlet-handler />
+</beans>

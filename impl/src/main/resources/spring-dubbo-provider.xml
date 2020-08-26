@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- qos的官方配置,可以把这个qos的端口修改了,可以在一台运行多个哦,
+    name="dubbo" port="20880" 也是可以修改然后可以运行多个实例
+    http://dubbo.apache.org/zh-cn/blog/introduction-to-dubbo-qos.html-->
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="com.fwtai.api.user.provider">
+        <dubbo:parameter key="qos.enable" value="true"/>
+        <dubbo:parameter key="qos.accept.foreign.ip" value="false"/>
+        <dubbo:parameter key="qos.port" value="10001"/>
+    </dubbo:application>
+
+    <!-- 使用ZK注册中心暴露服务地址 -->
+    <dubbo:registry address="zookeeper://192.168.3.166:2181"/>
+
+    <!-- 用Dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="20881"/>
+
+    <!-- 扫描注解接口实现类的包路径,只扫描实现类的包名即可,多个包用逗号,分隔[如果报错,则添加报名,com.fwtai.api] -->
+    <dubbo:annotation package="com.fwtai.impl"/>
+
+</beans>
